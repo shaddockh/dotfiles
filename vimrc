@@ -65,6 +65,9 @@ Bundle 'https://github.com/nathanaelkane/vim-indent-guides.git'
 Bundle 'https://github.com/Chiel92/vim-autoformat.git'
 Bundle 'https://github.com/ervandew/supertab.git'
 Bundle 'Raimondi/delimitMate'
+"Plugin 'jelera/vim-javascript-syntax'
+" fork of the jelera one
+Plugin 'https://github.com/othree/yajs.vim.git'
 
 " Optional:
 Bundle "honza/vim-snippets"
@@ -379,9 +382,11 @@ map <leader>Y V"*y
 " (windows only)
 :cnoreabbrev cmd :!cd %:p:h&&start /B cmd && exit<cr>
  
+
 " Don't close the window when closing a buffer
 " nmap <leader>d :b#<bar>bd#<bar>b<CR>
-nmap <leader>kc :b#<bar>bd#<bar>b<CR>
+" nmap <leader>kc :b#<bar>bd#<bar>b<CR>
+nmap <silent> <leader>d :bp\|bd #<CR>
 
 " Return to last edit position when opening files (You want this!)
 autocmd BufReadPost *
@@ -466,6 +471,14 @@ augroup vimrcEx
   au! CmdwinEnter * :unmap <cr>
   au! CmdwinLeave * :call MapCR()
 augroup END
+
+""""""""""""""""""""""""""""""
+" Custom File Types
+""""""""""""""""""""""""""""""
+au BufNewfile,BufRead,BufReadPost *.bdy setfiletype plsql
+au BufNewfile,BufRead,BufReadPost *.spc setfiletype plsql
+au BufNewfile,BufRead,BufReadPost *.mod setfiletype plsql
+au BufNewFile,BufRead *.es6 set filetype=javascript
 
 " Change the popup menu colors
 :highlight Pmenu guibg=black gui=bold guifg=yellow 
@@ -617,6 +630,8 @@ augroup END
 " Lua
 let g:syntastic_lua_checkers = ["luac", "luacheck"]
 let g:syntastic_lua_luacheck_args = "--no-unused-args" 
+
+let g:syntastic_javascript_checkers = ["jshint"]
  
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " JS-Beautify
@@ -637,6 +652,13 @@ nnoremap <leader>cf :Autoformat<cr>
 " Ctrl-P
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 map <leader>b :CtrlPBuffer<cr>
+map <leader>m :CtrlPMRU<cr>
+let g:ctrlp_match_window_bottom = 0
+let g:ctrlp_match_window_reversed = 0
+let g:ctrlp_custom_ignore = '\v\~$|\.(o|swp|pyc|wav|mp3|ogg|blend)$|(^|[/\\])\.(hg|git|bzr)($|[/\\])|__init__\.py'
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_dotfiles = 0
+let g:ctrlp_switch_buffer = 0
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " vim-javascript-syntax
@@ -818,9 +840,3 @@ else
   let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
-""""""""""""""""""""""""""""""
-" Custom File Types
-""""""""""""""""""""""""""""""
-au BufNewfile,BufRead,BufReadPost *.bdy setfiletype plsql
-au BufNewfile,BufRead,BufReadPost *.spc setfiletype plsql
-au BufNewfile,BufRead,BufReadPost *.mod setfiletype plsql
