@@ -5,7 +5,8 @@ let s:macmode = "N"
 if has("macunix")
     let s:macmode = "Y"
 endif
- 
+set termencoding=utf-8
+set encoding=utf-8
 "scriptencoding utf-8
  
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -68,6 +69,12 @@ Bundle 'Raimondi/delimitMate'
 "Plugin 'jelera/vim-javascript-syntax'
 " fork of the jelera one
 Plugin 'https://github.com/othree/yajs.vim.git'
+Plugin 'Majutsushi/Tagbar'
+
+Plugin 'unblevable/quick-scope' 
+Plugin 'tacahiroy/ctrlp-funky'
+Plugin 'EdKolev/tmuxline.vim'
+Plugin 'vasconcelloslf/vim-interestingwords'
 
 " Optional:
 Bundle "honza/vim-snippets"
@@ -81,12 +88,19 @@ if s:macmode == "Y"
     "NOTE: run omnisharp-vim/server/xbuild after updates
     Bundle 'https://github.com/tpope/vim-fugitive.git'
 	Bundle 'https://github.com/airblade/vim-gitgutter.git'
+    "YouCompleteMe Compile Instructions
+    "pushd ~/dotfiles/.vim/bundle/YouCompleteMe
+    "./install.py --clang-completer --omnisharp-completer
+    "popd
     Bundle 'https://github.com/Valloric/YouCompleteMe'
     if has("gui_running")
         #
     else
         Bundle 'christoomey/vim-tmux-navigator'
     endif
+
+    " really slow
+    "Plugin 'marijnh/tern_for_vim'
 
     " YouCompleteMe and UltiSnips compatibility, with the helper of supertab
     " (via http://stackoverflow.com/a/22253548/1626737)
@@ -99,6 +113,20 @@ if s:macmode == "Y"
     let g:UltiSnipsExpandTrigger="<tab>"
     let g:UltiSnipsJumpForwardTrigger="<tab>"
     let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+
+    """"""""""""""""""""""""""""
+    " Typescript
+    """"""""""""""""""""""""""""
+    Bundle 'Shougo/vimproc.vim'
+    " pushd ~/dotfiles/.vim/bundle/vimproc.vim
+    " make
+    " popd
+    "
+    Bundle 'Quramy/tsuquyomi'
+    "    Bundle 'clausreinke/typescript-tools.vim'
+    Bundle 'leafgarland/typescript-vim'
+
 endif
  
 filetype plugin indent on     " required!
@@ -168,6 +196,9 @@ set wildignore+=*.swp,*~,._*
 " Ignore unity files
 set wildignore+=*.meta,.DS_Store,*/metadata/*/*.*,*/ShaderCache/*/*.*,Temp/*/*.*
 
+" Ignore Atomic files
+set wildignore+=*.asset
+
 set complete=.,b,u,]
 
 "Always show current position
@@ -188,6 +219,9 @@ let g:netrw_liststyle=3
  
 " Turn on the mouse
 set mouse=a
+
+" Turn on spell checking
+set spell
  
 ""
 "" Whitespace
@@ -203,7 +237,8 @@ set autoindent    " Enable auto indentation
 " Invisible characters
 "set listchars=tab:▸\ ,nbsp:_
 "set listchars=tab:\ \ ,trail:·,eol:¬,nbsp:_,extends:❯,precedes:❮
-"set listchars=tab:▸\ ,trail:·,eol:¬,nbsp:_,extends:❯,precedes:❮
+"set listchars=tab:▸\ ,trail:·,nbsp:_,extends:❯,precedes:❮
+set listchars=tab:▸\ ,trail:·
 if has("gui_macvim")
     "set list listchars=tab:➝\ ,trail:·,extends:<,precedes:>
 else
@@ -212,11 +247,10 @@ endif
  
  
 " Don't show invisible characters (default)
-set nolist
+set list
  
 " Toggle set list
 nnoremap <leader>l :set list!<cr>
- 
  
 " Always move down and up by display lines instead of real lines
 " nnoremap <silent>j gj
@@ -395,6 +429,11 @@ autocmd BufReadPost *
      \ endif
 " Remember info about open buffers on close
 set viminfo^=%
+
+" Add empty line above ore below
+map ZO O<ESC>
+map Zo o<ESC>
+
  " =============================================================================
 " Multipurpose Tab Key
 " =============================================================================
@@ -447,7 +486,7 @@ augroup vimrcEx
  
   " Some file types use real tabs
   au FileType {make,gitconfig} set noexpandtab sw=4
- 
+
   " Treat JSON files like JavaScript
   au BufNewFile,BufRead *.json setf javascript
  
@@ -479,6 +518,13 @@ au BufNewfile,BufRead,BufReadPost *.bdy setfiletype plsql
 au BufNewfile,BufRead,BufReadPost *.spc setfiletype plsql
 au BufNewfile,BufRead,BufReadPost *.mod setfiletype plsql
 au BufNewFile,BufRead *.es6 set filetype=javascript
+
+augroup turbobadger
+  " Clear all autocmds for the current group
+  autocmd!
+  au BufNewfile,BufRead,BufReadPost *.tb setfiletype turbobadger
+  au FileType turbobadger setlocal noexpandtab sw=4
+augroup END
 
 " Change the popup menu colors
 :highlight Pmenu guibg=black gui=bold guifg=yellow 
@@ -561,7 +607,8 @@ map <leader>n <plug>NERDTreeTabsToggle<cr>
 " Show hidden files in NERDTree
 let NERDTreeShowHidden=1
 let NERDTreeShowLineNumbers=1
- 
+let NERDTreeIgnore = ['\.asset$']
+
 " NERDTree Tabs
 let g:nerdtree_tabs_smart_startup_focus=2
  
@@ -581,6 +628,16 @@ else
     set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h9
 endif
  
+ 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Quick Scope
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <leader>q <plug>(QuickScopeToggle)
+vmap <leader>q <plug>(QuickScopeToggle)
+
+" Trigger a highlight in the appropriate direction when pressing these keys:
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Easy Motion
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -611,12 +668,14 @@ set statusline+=%*
  
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 
 if has("mac") || has("macunix")
-    let g:syntastic_error_symbol = '✘'
-    let g:syntastic_warning_symbol = "▲"
+    "let g:syntastic_error_symbol = '✘'
+    let g:syntastic_error_symbol = 'x'
+    let g:syntastic_warning_symbol = "!"
+    "let g:syntastic_warning_symbol = "▲"
     "!let g:syntastic_error_symbol = 'âœ˜'
     "!let g:syntastic_warning_symbol = "â–²"
 endif
@@ -624,14 +683,16 @@ endif
 augroup mySyntastic
   au!
   au FileType tex let b:syntastic_mode = "passive"
+  au FileType javascript let b:syntastic_mode = "passive"
 augroup END
 
+map <Leader>ll :SyntasticCheck<cr>
 
 " Lua
 let g:syntastic_lua_checkers = ["luac", "luacheck"]
 let g:syntastic_lua_luacheck_args = "--no-unused-args" 
 
-let g:syntastic_javascript_checkers = ["jshint"]
+let g:syntastic_javascript_checkers = ["eslint"]
  
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " JS-Beautify
@@ -645,6 +706,8 @@ let g:syntastic_javascript_checkers = ["jshint"]
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Autoformat
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:formatdef_typescript = '"tsfmt --stdin"'
+let g:formatters_typescript = ['typescript']
 " map <c-f> :Autoformat<cr><cr>
 nnoremap <leader>cf :Autoformat<cr>
  
@@ -660,6 +723,15 @@ let g:ctrlp_working_path_mode = 0
 let g:ctrlp_dotfiles = 0
 let g:ctrlp_switch_buffer = 0
 
+let g:ctrlp_by_filename = 1
+let g:ctrlp_match_window = 'results:25' " overcome limit imposed by max height
+
+" Ctrl-P Funky
+map <leader>f :CtrlPFunky<cr>
+nnoremap <Leader>u :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
+let g:ctrlp_funky_sort_by_mru = 1
+let g:ctrlp_funky_matchtype = 'path'
+let g:ctrlp_funky_syntax_highlight = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " vim-javascript-syntax
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -698,6 +770,18 @@ let g:indent_guides_guide_Size = 1
 "au Syntax * RainbowParenthesesLoadBraces
  
  
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" OmniComplete
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set omnifunc=syntaxcomplete#Complete
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" TERN
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:tern_map_keys=1
+let g:tern_show_argument_hints="on_hold"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " OmniSharp
@@ -840,3 +924,7 @@ else
   let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" TAGBAR
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <F8> :TagbarToggle<CR>
