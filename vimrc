@@ -20,13 +20,17 @@ set encoding=utf-8
 " required for vundle
 filetype off
  
-if s:macmode == "Y"
-	set rtp+=~/dotfiles/.vim/bundle/vundle/
-	call vundle#rc("~/dotfiles/.vim/bundle")
-else
-    set rtp+=~/.vim/bundle/vundle/
-    call vundle#rc()
-endif
+"if s:macmode == "Y"
+"set rtp+=~/dotfiles/vim/bundle/vundle/
+"call vundle#rc("~/dotfiles/.vim/bundle")
+"else
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+"   #endif
  
 " let Vundle manage Vundle
 " required! 
@@ -47,25 +51,25 @@ Bundle 'gmarik/vundle'
 " Git repos on your local machine (i.e. when working on your own plugin)
 "Bundle 'file:///Users/gmarik/path/to/plugin'
 " ...
-Bundle 'altercation/vim-colors-solarized' 
+Plugin 'https://github.com/altercation/vim-colors-solarized' 
 "Bundle 'https://github.com/jonathanfilip/vim-lucius'
-Bundle 'https://github.com/scrooloose/nerdtree.git'
-Bundle 'https://github.com/scrooloose/nerdcommenter'
-Bundle 'https://github.com/jistr/vim-nerdtree-tabs.git'
-Bundle 'https://github.com/bling/vim-airline.git'
-Bundle 'https://github.com/scrooloose/syntastic.git'
-Bundle 'https://github.com/kien/ctrlp.vim.git'
+Plugin 'https://github.com/scrooloose/nerdtree.git'
+Plugin 'https://github.com/scrooloose/nerdcommenter'
+Plugin 'https://github.com/jistr/vim-nerdtree-tabs.git'
+Plugin 'https://github.com/bling/vim-airline.git'
+Plugin 'https://github.com/scrooloose/syntastic.git'
+Plugin 'https://github.com/kien/ctrlp.vim.git'
 "Bundle 'jelera/vim-javascript-syntax'
-Bundle 'https://github.com/nathanaelkane/vim-indent-guides.git'
+Plugin 'https://github.com/nathanaelkane/vim-indent-guides.git'
 "Bundle 'https://github.com/kien/rainbow_parentheses.vim'
 "!Bundle 'https://github.com/canadaduane/VimKata'
 "!Bundle 'https://github.com/Lokaltog/vim-easymotion.git'
 "Bundle 'https://github.com/koron/minimap-vim.git' -- doesn't work so well
 "Bundle 'maksimr/vim-jsbeautify' -- use autoformat..will use the external tools
 "Bundle 'einars/js-beautify'
-Bundle 'https://github.com/Chiel92/vim-autoformat.git'
-Bundle 'https://github.com/ervandew/supertab.git'
-Bundle 'Raimondi/delimitMate'
+Plugin 'https://github.com/Chiel92/vim-autoformat.git'
+Plugin 'https://github.com/ervandew/supertab.git'
+Plugin 'Raimondi/delimitMate'
 "Plugin 'jelera/vim-javascript-syntax'
 " fork of the jelera one
 Plugin 'https://github.com/othree/yajs.vim.git'
@@ -77,26 +81,26 @@ Plugin 'EdKolev/tmuxline.vim'
 Plugin 'vasconcelloslf/vim-interestingwords'
 
 " Optional:
-Bundle "honza/vim-snippets"
+Plugin 'https://github.com/honza/vim-snippets'
  
 if s:macmode == "Y"
 	" The following require Python
 	"Bundle 'https://github.com/vim-scripts/Conque-Shell.git'
-	Bundle 'https://github.com/severin-lemaignan/vim-minimap.git'
-    Bundle 'https://github.com/tpope/vim-dispatch.git'
-    Bundle 'https://github.com/OmniSharp/omnisharp-vim.git'
+	Plugin 'https://github.com/severin-lemaignan/vim-minimap.git'
+    Plugin 'https://github.com/tpope/vim-dispatch.git'
+    Plugin 'https://github.com/OmniSharp/omnisharp-vim.git'
     "NOTE: run omnisharp-vim/server/xbuild after updates
-    Bundle 'https://github.com/tpope/vim-fugitive.git'
-	Bundle 'https://github.com/airblade/vim-gitgutter.git'
+    Plugin 'https://github.com/tpope/vim-fugitive.git'
+	Plugin 'https://github.com/airblade/vim-gitgutter.git'
     "YouCompleteMe Compile Instructions
     "pushd ~/dotfiles/.vim/bundle/YouCompleteMe
     "./install.py --clang-completer --omnisharp-completer
     "popd
-    Bundle 'https://github.com/Valloric/YouCompleteMe'
+    Plugin 'https://github.com/Valloric/YouCompleteMe'
     if has("gui_running")
         #
     else
-        Bundle 'christoomey/vim-tmux-navigator'
+        Plugin 'christoomey/vim-tmux-navigator'
     endif
 
     " really slow
@@ -109,7 +113,7 @@ if s:macmode == "Y"
     let g:SuperTabDefaultCompletionType    = '<C-n>'
     let g:SuperTabCrMapping                = 0
 
-    Bundle 'SirVer/ultisnips'
+    Plugin 'SirVer/ultisnips'
     let g:UltiSnipsExpandTrigger="<tab>"
     let g:UltiSnipsJumpForwardTrigger="<tab>"
     let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
@@ -118,17 +122,18 @@ if s:macmode == "Y"
     """"""""""""""""""""""""""""
     " Typescript
     """"""""""""""""""""""""""""
-    Bundle 'Shougo/vimproc.vim'
+    Plugin 'Shougo/vimproc.vim'
     " pushd ~/dotfiles/.vim/bundle/vimproc.vim
     " make
     " popd
     "
-    Bundle 'Quramy/tsuquyomi'
+    Plugin 'Quramy/tsuquyomi'
     "    Bundle 'clausreinke/typescript-tools.vim'
-    Bundle 'leafgarland/typescript-vim'
+    Plugin 'leafgarland/typescript-vim'
 
 endif
- 
+call vundle#end()            " required
+
 filetype plugin indent on     " required!
 "
 " Brief help
