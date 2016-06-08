@@ -80,7 +80,9 @@ brew install \
   autoconf automake bash-completion cowsay cmatrix \
   ffmpeg figlet gettext go gpg freetype htop-osx jq libxml2 mongodb node \
   phantomjs postgres qt readline sqlite unrar v8 wget youtube-dl \
-  tmux macvim
+  tmux macvim git
+
+brew install ffmpeg --with-libvpx
 
 # brew cask fonts
 echo_warn "Installing fonts..."
@@ -117,23 +119,26 @@ echo_warn "Installing applications..."
 # google
 brew cask install google-chrome google-hangouts google-drive --force
 # other favorites
-brew cask install bettertouchtool
+# brew cask install bettertouchtool
 brew cask install caffeine
-brew cask install karabiner 
-brew cask install the-unarchiver 
+# brew cask install karabiner
+brew cask install the-unarchiver
 brew cask install flux
 brew cask install 1password
 brew cask install dropbox
 brew cask install evernote
 brew cask install skitch
 brew cask install iterm2
-brew cask install mongohub 
-brew cask install chrome-devtools 
+brew cask install mongohub
+brew cask install chrome-devtools
 brew cask install firefox
 brew cask install atom
-brew cask install filezilla 
-brew cask install picturelife 
-
+brew cask install filezilla
+brew cask install picturelife
+brew cask install alfred
+brew cask install sourcetree
+brew cask install audacity
+brew cask install disk-inventory-x
    #day-o
   #minecraft spotify transmission vlc \
   #slack skype telephone \
@@ -153,6 +158,14 @@ brew cask install inkscape
 brew install librsvg
 brew install imagemagick --with-librsvg
 
+
+
+# Set up some OSX defaults
+
+# borrowed from https://github.com/alexandrecormier/dotfiles/tree/master/init
+# Screenshot settings
+defaults write com.apple.screencapture type png
+defaults write com.apple.screencapture location ~/Pictures/Screenshots
 
 echo
 echo_ok "Done."

@@ -1,3 +1,6 @@
+# Load up bashrc
+[[ -s ~/.bashrc ]] && source ~/.bashrc
+
 export PATH="/usr/local/bin:/usr/local/share/npm/bin:$PATH"
 export NODE_PATH="/usr/local/lib/node_modules:$NODE_PATH"
 alias ll="ls -al"
@@ -69,6 +72,13 @@ PS1="$prompt_style"'${debian_chroot:+($debian_chroot)}\u:\w\$'"$command_style "
 # Finished adapting your PATH environment variable for use with MacPorts.
 
 ############################################
+# Bash Completion
+############################################
+if [ -f `brew --prefix`/etc/bash_completion ]; then
+    . `brew --prefix`/etc/bash_completion
+fi
+
+############################################
 # TMUX Stuff
 ############################################
 alias tma='tmux attach -d -t '
@@ -86,3 +96,4 @@ alias tml='tmux list-sessions'
 #        tmux attach-session -t "$ID" # if available attach to it
 #    fi
 #fi
+
