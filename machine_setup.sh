@@ -180,3 +180,16 @@ echo
 echo "You may want to add the following settings to your .bashrc:"
 echo_warn '  export HOMEBREW_CASK_OPTS="--appdir=/Applications"'
 echo
+
+
+#setup vundle for vim
+echo "Setting up vundle for vim"
+mkdir ~/.vim/bundle
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+echo "Need to run VundleInstall in vim after running"
+echo_ok "Done."
+
+echo "setting up tmux plugin manager"
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+echo "in tmux, type CTRL-A + I to install plugins"
+
